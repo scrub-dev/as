@@ -18,23 +18,18 @@ const asArray = [
 ]
 
 
-const wait = (s) => new Promise((r) => setTimeout(r, s * 1000));
-
-let printWidth = asArray[0].length;
-let totalWidthMargin = process.stdout.columns - printWidth;
-let widthMargin = Math.floor(totalWidthMargin / 2);
-
-let printHeight = asArray.length;
-let totalHeightMargin = process.stdout.rows - printHeight;
-let heightMargin = Math.floor(totalHeightMargin / 2);
-
 const print = async () => {
     console.clear();
-    Array.from({ length: heightMargin }).forEach(() => console.log(''));
-    for (let i = 0; i < asArray.length; i++) {
-        await wait(0.2);
-        console.log(" ".repeat(widthMargin)+asArray[i]);
-    }
-    Array.from({ length: heightMargin }).forEach(() => console.log(''));
+    Array.from({ length: (Math.floor(process.stdout.rows - asArray.length) / 2) }).forEach(() => console.log(''));
+    for (let i = 0; i < asArray.length; i++) await (async s => (new Promise((r) => setTimeout(r, s * 1000))))(0.2).then(() => console.log(" ".repeat((Math.floor(process.stdout.columns - asArray[0].length) / 2))+asArray[i]))
+    Array.from({ length: (Math.floor(process.stdout.rows - asArray.length) / 2) }).forEach(() => console.log(''));
 }
 print()
+
+
+
+const one_liner = async () => {
+    for(let i = 0; i < process.stdout.rows; i++)console.log(" ".repeat((Math.floor(process.stdout.columns - asArray[0].length) / 2)) + ((asArray[i - Math.floor((process.stdout.rows - asArray.length) / 2) - 1]) ? asArray[i - Math.floor((process.stdout.rows - asArray.length) / 2) - 1] : ""));
+}
+
+// one_liner()
